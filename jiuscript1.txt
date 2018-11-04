@@ -1,0 +1,15 @@
+SHOW DATABASES;
+DROP DATABASE IF EXISTS jiuassign2db;
+CREATE DATABASE jiuassign2db;
+USE jiuassign2db;
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON jiuassign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+SHOW TABLES;
+CREATE TABLE products (pid char(2) NOT NULL, description char(20), cost float, quantity int, PRIMARY KEY(pid));
+CREATE TABLE agents (aid char(2) NOT NULL, firstname char(30), lastname char(30), city char(15), commission int, PRIMARY KEY(aid));
+CREATE TABLE customers (cid char(2) NOT NULL, firstname char(30), lastname char(30), city char(15), phone char(10), agentID char(2), PRIMARY KEY(cid), FOREIGN KEY (agentID) REFERENCES agents(aid));
+CREATE TABLE purchase (amount int, productID char(2), customerID char(2), FOREIGN KEY (productID) REFERENCES products(pid), FOREIGN KEY (customerID) REFERENCES customers(cid));
+SHOW TABLES;

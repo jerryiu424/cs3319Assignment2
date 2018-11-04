@@ -1,0 +1,132 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SELECT description FROM products
+--------------
+
+description
+Bike
+Socks
+Elbow pads
+Gloves
+Knee Pads
+Roller Blades
+Helmet
+--------------
+SELECT DISTINCT(city) FROM customers
+--------------
+
+city
+Boston
+Springfield
+Kypto
+Providence
+--------------
+SELECT * FROM agents ORDER BY city
+--------------
+
+aid	firstname	lastname	city	commission
+33	David	Letterman	Bedrock	100
+11	Regis	Philbin	Boston	33
+22	Courtney	Cox	New York	25
+12	Rosie	Cox	Ottawa	50
+66	Rosie	ODonnell	Ottawa	100
+99	Hugh	Grant	Springfield	16
+24	Jerry	Iu	Toronto	42
+--------------
+SELECT firstname as 'First Name', lastname as 'Last Name' FROM customers WHERE city = 'Springfield'
+--------------
+
+First Name	Last Name
+Monty	Burns
+Homer	Simpson
+Sideshow	Bob
+--------------
+SELECT lastname as 'Last Name' FROM customers WHERE agentID = (SELECT aid FROM agents WHERE firstname = 'Regis')
+--------------
+
+Last Name
+Rubbie
+Flinstone
+--------------
+SELECT description as 'Description' FROM products WHERE description LIKE "%pad%" OR description LIKE "%Pad%"
+--------------
+
+Description
+Elbow pads
+Knee Pads
+--------------
+SELECT c.lastname as 'Last Name', p.description as 'Description', pur.amount FROM customers as c, products as p, purchase as pur WHERE pur.productID = p.pid AND pur.customerID = c.cid
+--------------
+
+Last Name	Description	amount
+Griffens	Elbow pads	19
+Flinstone	Elbow pads	2
+Flinstone	Knee Pads	2
+Simpson	Helmet	20
+Simpson	Socks	14
+Simpson	Elbow pads	10
+Bob	Helmet	5
+Bob	Socks	5
+Bob	Knee Pads	5
+Bob	Elbow pads	5
+--------------
+SELECT SUM(amount) as "Homer's Total Purchases" FROM purchase WHERE customerID = (SELECT cid FROM customers WHERE firstname = 'Homer')
+--------------
+
+Homer's Total Purchases
+44
+--------------
+SELECT c.firstname as 'First Name', c.lastname as 'Last Name', SUM(amount) as 'Total number of purchases' FROM customers as c, purchase WHERE c.cid = customerID GROUP BY (customerID)
+--------------
+
+First Name	Last Name	Total number of purchases
+Peter	Griffens	19
+Fred	Flinstone	4
+Homer	Simpson	44
+Sideshow	Bob	20
+--------------
+SELECT description, quantity FROM products WHERE pid NOT IN(SELECT productID FROM purchase)
+--------------
+
+description	quantity
+Bike	200
+Gloves	50
+Roller Blades	89
+--------------
+SELECT description, quantity FROM products WHERE pid NOT IN(SELECT productID FROM purchase WHERE customerID = (SELECT cid FROM customers WHERE firstname = 'Fred' AND lastname = 'Flintstone'))
+--------------
+
+description	quantity
+Bike	200
+Socks	100
+Elbow pads	120
+Gloves	50
+Knee Pads	70
+Roller Blades	89
+Helmet	30
+--------------
+SELECT a.firstname as 'First Name', a.lastname as 'Last Name' FROM agents as a WHERE aid IN (SELECT c.agentID FROM customers as c WHERE a.city = c.city)
+--------------
+
+First Name	Last Name
+Regis	Philbin
+Hugh	Grant
+--------------
+SELECT SUM(amount) as 'Total amount of knee pads purchased' FROM purchase WHERE productID = (SELECT pid FROM products WHERE description = 'Knee Pads')
+--------------
+
+Total amount of knee pads purchased
+7
+--------------
+SELECT description as 'Description' FROM products WHERE pid IN (SELECT productID FROM (SELECT b.productID, count(b.productID) as bCount FROM purchase as b GROUP BY (b.productID)) as c WHERE c.bCount > 3)
+--------------
+
+Description
+Elbow pads
+--------------
+SELECT a.firstname as 'First Name', a.lastname as 'Last Name' FROM agents as a, customers as c, products as p, purchase as pur WHERE a.aid = c.agentID AND c.cid = pur.customerID AND pur.productID = p.pid AND p.description = 'Knee Pads'
+--------------
+
+First Name	Last Name
+Regis	Philbin
+Rosie	ODonnell

@@ -1,0 +1,31 @@
+USE jiuassign2db;
+-- Query 1
+SELECT description FROM products;
+-- Query 2
+SELECT DISTINCT(city) FROM customers;
+-- Query 3
+SELECT * FROM agents ORDER BY city;
+-- Query 4
+SELECT firstname as 'First Name', lastname as 'Last Name' FROM customers WHERE city = 'Springfield';
+-- Query 5
+SELECT lastname as 'Last Name' FROM customers WHERE agentID = (SELECT aid FROM agents WHERE firstname = 'Regis');
+-- Query 6
+SELECT description as 'Description' FROM products WHERE description LIKE "%pad%" OR description LIKE "%Pad%";
+-- Query 7
+SELECT c.lastname as 'Last Name', p.description as 'Description', pur.amount FROM customers as c, products as p, purchase as pur WHERE pur.productID = p.pid AND pur.customerID = c.cid;
+-- Query 8
+SELECT SUM(amount) as "Homer's Total Purchases" FROM purchase WHERE customerID = (SELECT cid FROM customers WHERE firstname = 'Homer');
+-- Query 9
+SELECT c.firstname as 'First Name', c.lastname as 'Last Name', SUM(amount) as 'Total number of purchases' FROM customers as c, purchase WHERE c.cid = customerID GROUP BY (customerID);
+-- Query 10
+SELECT description, quantity FROM products WHERE pid NOT IN(SELECT productID FROM purchase);
+-- Query 11
+SELECT description, quantity FROM products WHERE pid NOT IN(SELECT productID FROM purchase WHERE customerID = (SELECT cid FROM customers WHERE firstname = 'Fred' AND lastname = 'Flintstone'));
+-- Query 12
+SELECT a.firstname as 'First Name', a.lastname as 'Last Name' FROM agents as a WHERE aid IN (SELECT c.agentID FROM customers as c WHERE a.city = c.city);
+-- Query 13
+SELECT SUM(amount) as 'Total amount of knee pads purchased' FROM purchase WHERE productID = (SELECT pid FROM products WHERE description = 'Knee Pads');
+-- Query 14
+SELECT description as 'Description' FROM products WHERE pid IN (SELECT productID FROM (SELECT b.productID, count(b.productID) as bCount FROM purchase as b GROUP BY (b.productID)) as c WHERE c.bCount > 3);
+-- Query 15
+SELECT a.firstname as 'First Name', a.lastname as 'Last Name' FROM agents as a, customers as c, products as p, purchase as pur WHERE a.aid = c.agentID AND c.cid = pur.customerID AND pur.productID = p.pid AND p.description = 'Knee Pads';
