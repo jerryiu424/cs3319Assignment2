@@ -1,12 +1,20 @@
+-- Jerry Iu (250916521) Script 1
+-- Build database
 SHOW DATABASES;
 DROP DATABASE IF EXISTS jiuassign2db;
 CREATE DATABASE jiuassign2db;
+
+-- Go to newly created database
 USE jiuassign2db;
+
+-- Give permission to TA to access my database
 GRANT USAGE ON *.* TO 'ta'@'localhost';
 DROP USER 'ta'@'localhost';
 CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
 GRANT ALL PRIVILEGES ON jiuassign2db.* TO 'ta'@'localhost';
 FLUSH PRIVILEGES;
+
+-- Create Tables
 SHOW TABLES;
 CREATE TABLE products (pid char(2) NOT NULL, description char(20), cost float, quantity int, PRIMARY KEY(pid));
 CREATE TABLE agents (aid char(2) NOT NULL, firstname char(30), lastname char(30), city char(15), commission int, PRIMARY KEY(aid));

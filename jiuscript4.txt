@@ -1,13 +1,27 @@
+-- Jerry Iu (250916521) Script 4
 USE jiuassign2db;
+
+-- Show all tables
 SELECT * FROM agents;
 SELECT * FROM customers;
 SELECT * FROM products;
 SELECT * FROM purchase;
+
+-- Create a new VIEW ,view1, to store a combination of information from all tables 
 CREATE VIEW view1 AS (SELECT c.firstname as 'FirstName', c.lastname as 'LastName', p.description as 'Description', pur.amount as 'Quantity', p.cost as 'Price', pur.amount*p.cost as 'TotalCost' FROM customers as c, products as p, purchase as pur WHERE p.pid = pur.productID AND c.cid = pur.customerID ORDER BY(c.lastname));
+
+-- Show the newly created VIEW
 SELECT * FROM view1;
+
+-- SHOW the newly created VIEW with a condition
 SELECT * FROM view1 WHERE TotalCost > 100;
+
+-- Modify the products table
 DELETE FROM products WHERE pid = '77';
+-- Show the changes made
 SELECT * FROM products;
+
+-- Attempt to delete from the agent table
 DELETE FROM agents WHERE city = 'Springfield';
 -- the row for agent 'Hugh Grant' where his/her home city was from Springfield was not deleted because he had customers to deal with and a customer could not be created with having an agent assigned to them, and so to delete agent 'Hugh Grant' row, we can either reassign his customers to other agents or delete his customers first then delete his row.
 

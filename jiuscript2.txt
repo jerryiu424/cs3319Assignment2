@@ -1,5 +1,10 @@
+-- Jerry Iu (250916521) Script 2
 USE jiuassign2db;
+
+-- Add data from a local file into a table
 LOAD DATA LOCAL INFILE 'file2Data.txt' INTO TABLE products FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
+
+-- Add data using the INSERT command
 SELECT * FROM products;
 INSERT INTO products VALUES ('66',  'Elbow pads', 14.25, 120);
 INSERT INTO products VALUES ('77',  'Gloves', 10.99, 50);
@@ -27,13 +32,19 @@ INSERT INTO purchase VALUES (2, '66', '31');
 INSERT INTO purchase VALUES (2, '66', '15');
 INSERT INTO purchase VALUES (2, '78', '15');
 INSERT INTO purchase VALUES (19, '66', '14');
+
+-- Show all tables with all the new data added
 SELECT * FROM products;
 SELECT * FROM agents;
 SELECT * FROM customers;
 SELECT * FROM purchase;
+
+-- Modify some data using the UPDATE command
 UPDATE customers SET firstname = 'Wonder', lastname = 'Woman' WHERE firstname = 'Super' AND lastname = 'Man';
 UPDATE purchase SET amount = 5 WHERE customerID = (SELECT cid FROM customers WHERE firstname = 'Sideshow' AND lastname = 'Bob');
 UPDATE customers SET city = 'Boston' WHERE agentID = (SELECT aid FROM agents WHERE firstname = 'Regis' AND lastname ='Philbin');
+
+-- Show all tables with the updated data
 SELECT * FROM products;
 SELECT * FROM agents;
 SELECT * FROM customers;
